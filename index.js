@@ -4,6 +4,7 @@ const waApi = WolframAlphaAPI('5EAHVR-Y5YXPLL59Q');
 const fs = require('fs');
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 var localCity = '';
 var localState = '';
@@ -65,5 +66,5 @@ exports.helloWorld = (req, res) => {
       }).catch(console.error)
   })
 
-  app.listen(3000);
+  app.listen(PORT);
 
