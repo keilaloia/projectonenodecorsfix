@@ -1,10 +1,17 @@
 //const axios = require('axios');
 const WolframAlphaAPI = require('wolfram-alpha-api');
 const waApi = WolframAlphaAPI('5EAHVR-Y5YXPLL59Q');
-const fs = require('fs');
+var cors = require('cors')
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+// app.all('*', function(req, res, next) {
+//   // res.header("Access-Control-Allow-Origin", "*");
+//   // res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//   // next();
+// });
 
 var localCity = '';
 var localState = '';
@@ -22,28 +29,28 @@ var data =
     sales: ''
 
 }
-exports.helloWorld = (req, res) => {
-    waApi.getFull({
-        input: 'moving Redmond,Washington to New York,New York',
-      }).then((queryresult) => {
+// exports.helloWorld = (req, res) => {
+//     waApi.getFull({
+//         input: 'moving Redmond,Washington to New York,New York',
+//       }).then((queryresult) => {
 
-        population = queryresult.pods[1].subpods[0].img.src;
-        medianHouse = queryresult.pods[2].subpods[0].img.src;
-        unemployment = queryresult.pods[3].subpods[0].img.src;
-        crimeRate = queryresult.pods[4].subpods[0].img.src;
-        salesTax = queryresult.pods[5].subpods[0].img.src;
+//         population = queryresult.pods[1].subpods[0].img.src;
+//         medianHouse = queryresult.pods[2].subpods[0].img.src;
+//         unemployment = queryresult.pods[3].subpods[0].img.src;
+//         crimeRate = queryresult.pods[4].subpods[0].img.src;
+//         salesTax = queryresult.pods[5].subpods[0].img.src;
 
-        data.pop = population;
-        data.medianH = medianHouse;
-        data.unemployed = unemployment;
-        data.crime = crimeRate;
-        data.sales = salesTax;
+//         data.pop = population;
+//         data.medianH = medianHouse;
+//         data.unemployed = unemployment;
+//         data.crime = crimeRate;
+//         data.sales = salesTax;
 
-        let datajson = JSON.stringify(data); 
-        res.json(datajson);
-        fs.writeFileSync('data.json', datajson);
-      }).catch(console.error)
-  };
+//         let datajson = JSON.stringify(data); 
+//         res.json(datajson);
+//         fs.writeFileSync('data.json', datajson);
+//       }).catch(console.error)
+//   };
 
   app.get('/',(req,res)=>{
     waApi.getFull({
