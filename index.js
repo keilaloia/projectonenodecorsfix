@@ -9,26 +9,21 @@ const PORT = process.env.PORT || 3000;
 app.use(cors({
 }));
 
-var localCity = '';
-var localState = '';
-var foundCity = '';
-var foundState = '';
-
-var population, medianHouse, unemployment, crimeRate, salesTax;
+var population, medianHouse, unemployment, incomeRate, crimeRate, salesTax;
 
 var data = 
 {
     pop: '',
-    medianH: '',
-    unemployed: '',
+    medianH: '',//median household income and COL
+    unemployed: '',//demographics
     crime: '',
-    sales: ''
+    sales: ''//average income
 
 }
 
   app.get('/',(req,res)=>{
     waApi.getFull({
-        input: `moving  ${req.query.startCity} ${req.query.startState} to ${req.query.endCity} ${req.query.endState}`,
+        input: `${req.query.startCity} ${req.query.startState} vs ${req.query.endCity} ${req.query.endState}`,
       }).then((queryresult) => {
         // res.send(queryresult);
 
@@ -37,18 +32,13 @@ var data =
           populate(queryresult.pods[i]);
           
         }
-        // population = queryresult.pods[2].subpods[0].img.src;
-        // medianHouse = queryresult.pods[3].subpods[0].img.src;
-        // unemployment = queryresult.pods[4].subpods[0].img.src;
-        // crimeRate = queryresult.pods[5].subpods[0].img.src;
-        // salesTax = queryresult.pods[6].subpods[0].img.src;
-
+    
         data.pop = population;
         data.medianH = medianHouse;
         data.unemployed = unemployment;
         data.crime = crimeRate;
         data.sales = salesTax;
-
+        //res.send(queryresult);
         res.send(data);
       }).catch(console.error)
   })
@@ -58,36 +48,32 @@ var data =
     switch(val.title)
     {
       case "Populations":
-          console.log("pop")
+
           population = val.subpods[0].img.src;
         break;
-      case "Housing sale prices":
-          console.log("housing")
+      case "Economic properties"://household income and COL
 
           medianHouse = val.subpods[0].img.src;
         break;      
-      case "Unemployment rates":
-          console.log("employment")
+      case "Demographics":
 
           unemployment = val.subpods[0].img.src;
-        break;      
-      case "Crime rates":
-          console.log("crime")
+        break;    
+      case "Other indicators":
 
           crimeRate = val.subpods[0].img.src;
         break;
-      case "Sales taxes":
-          console.log("ST")
+      case "Income statistics"://average income
 
           salesTax = val.subpods[0].img.src;
         break;
       default:
-          console.log("error");
         break;
 
     }
 
   }
 
+  
   app.listen(PORT);
 
